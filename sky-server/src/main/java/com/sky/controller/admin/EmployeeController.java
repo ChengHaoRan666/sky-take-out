@@ -71,4 +71,14 @@ public class EmployeeController {
         return Result.success();
     }
 
+
+    /**
+     * 新增员工
+     */
+    @PostMapping("")
+    public Result<String> addEmployee(Employee employee) {
+        employeeService.addEmployee(employee);
+        return Result.success();
+    }
+
 }
