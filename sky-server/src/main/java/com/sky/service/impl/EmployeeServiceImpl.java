@@ -92,7 +92,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         // TODO 设置更新人（不是写死，需要修改）
         employee.setUpdateUser(10L);
         employeeMapper.addEmployee(employee);
-        return;
     }
 
 }
