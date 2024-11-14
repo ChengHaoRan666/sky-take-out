@@ -77,6 +77,8 @@ public class EmployeeController {
      */
     @PostMapping("")
     public Result<String> addEmployee(Employee employee) {
+        log.info("添加员工");
+        log.info(employee.toString());
         employeeService.addEmployee(employee);
         return Result.success();
     }
