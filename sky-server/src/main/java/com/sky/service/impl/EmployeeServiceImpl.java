@@ -1,7 +1,9 @@
 package com.sky.service.impl;
 
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
@@ -11,9 +13,12 @@ import com.sky.mapper.EmployeeMapper;
 import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import java.time.LocalDateTime;
 
 @Service
 @Slf4j
@@ -62,9 +67,32 @@ public class EmployeeServiceImpl implements EmployeeService {
      * 新增员工
      */
     @Override
-    public Result<Employee> addEmployee(Employee employee) {
+    public void addEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        // 拷贝对象属性
+        BeanUtils.copyProperties(employeeDTO, employee);
+
+// 想将DTO的实体中的信息转移到entity中，便于Dao层插入数据
+//        employee.setName(employeeDTO.getName());
+//        employee.setUsername(employeeDTO.getUsername());
+//        employee.setPhone(employeeDTO.getPhone());
+//        employee.setSex(employeeDTO.getSex());
+//        employee.setIdNumber(employeeDTO.getIdNumber());
+
+        // 设置员工状态 1：正常  0：停用
+        employee.setStatus(StatusConstant.ENABLE);
+        // 设置密码,进行md5加密
+        employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
+        // 设置创建时间
+        employee.setCreateTime(LocalDateTime.now());
+        // 设置更新时间
+        employee.setUpdateTime(LocalDateTime.now());
+        // TODO 设置创建人（不是写死，需要修改）
+        employee.setCreateUser(10L);
+        // TODO 设置更新人（不是写死，需要修改）
+        employee.setUpdateUser(10L);
         employeeMapper.addEmployee(employee);
-        return Result.success(employee);
+        return;
     }
 
 }

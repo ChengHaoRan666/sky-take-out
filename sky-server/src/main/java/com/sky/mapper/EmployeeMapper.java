@@ -23,6 +23,8 @@ public interface EmployeeMapper {
      * @param employee 待添加员工信息
      * @return 1表示成功 0或其他表示失败
      */
-    @Insert("")
+    @Insert("insert into employee " +
+            "(name, username, password, phone, sex, id_number, status, create_time, update_time, create_user, update_user)" +
+            " values (#{name},#{username},#{password},#{phone},#{sex},#{idNumber},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser});")
     Integer addEmployee(Employee employee);
 }
