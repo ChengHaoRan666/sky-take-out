@@ -117,4 +117,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+    /**
+     * 修改员工账号状态
+     *
+     * @param id     待修改员工id
+     * @param status 要修改成的状态
+     */
+    @Override
+    public void status(Long id, int status) {
+        employeeMapper.status(id, status);
+    }
+
 }
