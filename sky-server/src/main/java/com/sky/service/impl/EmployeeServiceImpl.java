@@ -125,7 +125,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void status(Long id, int status) {
-        employeeMapper.status(id, status);
+        Employee employee = Employee.builder().status(status).id(id).build();
+        employeeMapper.status(employee);
     }
 
 }

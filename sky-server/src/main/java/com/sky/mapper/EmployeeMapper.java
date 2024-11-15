@@ -41,7 +41,7 @@ public interface EmployeeMapper {
     Page<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
 
     /**
-     * 修改员工账户状态
+     * 修改员工属性
      */
-    Integer status(Long id, int status);
+    Integer status(Employee employee);
 }

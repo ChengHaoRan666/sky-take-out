@@ -102,7 +102,6 @@ public class EmployeeController {
     /**
      * 启用，禁用员工账号
      */
-    //POST/admin/employee
     @PostMapping("/status/{status}")
     @ApiOperation("启用/禁用员工账号")
     public Result<String> status(Long id, @PathVariable("status") Integer status) {
