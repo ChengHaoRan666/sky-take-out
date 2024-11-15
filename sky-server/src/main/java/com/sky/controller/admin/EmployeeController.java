@@ -80,9 +80,9 @@ public class EmployeeController {
     /**
      * 新增员工
      */
-    @PostMapping("")
+    @PostMapping
     @ApiOperation("新增员工")
-    public Result<String> addEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    public Result addEmployee(@RequestBody EmployeeDTO employeeDTO) {
         employeeService.addEmployee(employeeDTO);
         return Result.success();
     }
@@ -104,9 +104,32 @@ public class EmployeeController {
      */
     @PostMapping("/status/{status}")
     @ApiOperation("启用/禁用员工账号")
-    public Result<String> status(Long id, @PathVariable("status") Integer status) {
+    public Result status(Long id, @PathVariable("status") Integer status) {
         log.info("员工账号{},{}", id, status);
         employeeService.status(id, status);
         return Result.success();
+    }
+
+
+    /**
+     * 修改员工信息
+     */
+    @PutMapping
+    @ApiOperation("编辑用户信息")
+    public Result EditInformation(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("编辑用户信息：{}", employeeDTO);
+        employeeService.EditInformation(employeeDTO);
+        return Result.success();
+    }
+
+
+    /**
+     * 通过id获得员工信息
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("通过id获得员工信息")
+    public Result<Employee> getEmployee(@PathVariable("id") String id) {
+        Employee employee = employeeService.getEmployeeById(id);
+        return Result.success(employee);
     }
 }

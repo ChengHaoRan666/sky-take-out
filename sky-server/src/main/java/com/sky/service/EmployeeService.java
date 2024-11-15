@@ -37,4 +37,19 @@ public interface EmployeeService {
      * 修改员工账号状态
      */
     void status(Long id, int status);
+
+    /**
+     * 修改员工信息
+     *
+     * @param employeeDTO
+     */
+    void EditInformation(EmployeeDTO employeeDTO);
+
+    /**
+     * 根据id查询员工信息
+     *
+     * @param id
+     * @return
+     */
+    Employee getEmployeeById(String id);
 }

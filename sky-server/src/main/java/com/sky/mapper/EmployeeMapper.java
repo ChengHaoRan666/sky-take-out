@@ -44,4 +44,13 @@ public interface EmployeeMapper {
      * 修改员工属性
      */
     Integer status(Employee employee);
+
+
+    /**
+     * 通过id查员工信息
+     * @param id
+     * @return
+     */
+    @Select("select * from employee where id = #{id}")
+    Employee getById(String id);
 }
