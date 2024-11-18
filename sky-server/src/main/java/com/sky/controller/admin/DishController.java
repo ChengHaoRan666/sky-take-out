@@ -64,4 +64,14 @@ public class DishController {
         PageResult pageResult = dishService.pageQuery(dishPageQueryDTO);
         return Result.success(pageResult);
     }
+
+    /**
+     * 修改菜品
+     */
+    @PutMapping
+    @ApiOperation("修改菜品")
+    public Result changeDish() {
+
+        return Result.success();
+    }
 }
