@@ -54,6 +54,16 @@ public class DishServiceImpl implements DishService {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);
         dishMapper.addDish(dish);
-        dishFlavorMapper.addDishFlavor(dishDTO.getFlavors());
+        //获取insert语句生成的主键值
+        Long dishId = dish.getId();
+
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if (flavors != null && !flavors.isEmpty()) {
+            flavors.forEach(dishFlavor -> {
+                dishFlavor.setDishId(dishId);
+            });
+            //向口味表插入n条数据
+            dishFlavorMapper.addDishFlavor(flavors);
+        }
     }
 }
