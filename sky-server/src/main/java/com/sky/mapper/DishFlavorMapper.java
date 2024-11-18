@@ -19,4 +19,9 @@ public interface DishFlavorMapper {
      */
     @Select("select * from dish_flavor where dish_id = #{dishId}")
     List<DishFlavor> getById(Long dishId);
+
+    /**
+     * 添加菜品口味信息
+     */
+    void addDishFlavor(List<DishFlavor> dishFlavors);
 }

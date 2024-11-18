@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.sky.dto.DishDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.mapper.DishFlavorMapper;
@@ -41,5 +42,18 @@ public class DishServiceImpl implements DishService {
         BeanUtils.copyProperties(dish, dishVO);
         dishVO.setFlavors(dishFlavors);
         return dishVO;
+    }
+
+    /**
+     * 添加菜品
+     *
+     * @param dishDTO 添加菜品的DTO
+     */
+    @Override
+    public void addDish(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+        dishMapper.addDish(dish);
+        dishFlavorMapper.addDishFlavor(dishDTO.getFlavors());
     }
 }

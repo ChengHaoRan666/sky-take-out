@@ -1,6 +1,9 @@
 package com.sky.mapper;
 
+import com.sky.annotaion.AutoFill;
 import com.sky.entity.Dish;
+import com.sky.enumeration.OperationType;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -25,9 +28,21 @@ public interface DishMapper {
 
     /**
      * 通过id查询菜品表
+     *
      * @param id 菜品id
      * @return 菜品
      */
     @Select("select * from dish where id = #{id}")
     Dish getById(Long id);
+
+
+    /**
+     * 添加菜品
+     *
+     * @param dish 菜品
+     */
+    @Insert("insert into dish (id, name, category_id, price, image, description, status, create_time, update_time, create_user, update_user) values " +
+            "(#{id},#{name},#{categoryId},#{price},#{image},#{description},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser});")
+    @AutoFill(OperationType.INSERT)
+    void addDish(Dish dish);
 }
