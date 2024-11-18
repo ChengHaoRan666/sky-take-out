@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.sky.entity.Dish;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -22,4 +23,11 @@ public interface DishMapper {
     Integer countByCategoryId(Long categoryId);
 
 
+    /**
+     * 通过id查询菜品表
+     * @param id 菜品id
+     * @return 菜品
+     */
+    @Select("select * from dish where id = #{id}")
+    Dish getById(Long id);
 }

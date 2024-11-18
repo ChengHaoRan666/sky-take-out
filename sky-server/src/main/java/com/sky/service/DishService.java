@@ -1,5 +1,7 @@
 package com.sky.service;
 
+import com.sky.vo.DishVO;
+
 /**
  * @Author: 程浩然
  * @Create: 2024/11/16 - 17:50
@@ -8,4 +10,10 @@ package com.sky.service;
 
 public interface DishService {
 
+    /**
+     * 通过id查询菜品
+     * @param id 菜品id
+     * @return 菜品信息DishVO
+     */
+    DishVO getById(Long id);
 }
