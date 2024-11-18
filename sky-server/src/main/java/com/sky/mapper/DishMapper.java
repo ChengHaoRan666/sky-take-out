@@ -1,10 +1,15 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
 import com.sky.annotaion.AutoFill;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
+import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @Author: 程浩然
@@ -42,4 +47,20 @@ public interface DishMapper {
      */
     @AutoFill(OperationType.INSERT)
     void addDish(Dish dish);
+
+    /**
+     * 通过分类id查找菜品
+     *
+     * @param categoryId 分类id
+     * @return 菜品集合
+     */
+    @Select("select * from dish where category_id = #{categoryId}")
+    List<Dish> getByCategoryId(Long categoryId);
+
+    /**
+     * 根据条件分页查询
+     * @param dishPageQueryDTO 查询条件
+     * @return
+     */
+    Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
 }

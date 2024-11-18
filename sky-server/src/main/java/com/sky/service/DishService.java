@@ -1,7 +1,12 @@
 package com.sky.service;
 
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
+import com.sky.result.PageResult;
 import com.sky.vo.DishVO;
+
+import java.util.List;
 
 /**
  * @Author: 程浩然
@@ -25,4 +30,19 @@ public interface DishService {
      * @param dishDTO 添加菜品的DTO
      */
     void addDish(DishDTO dishDTO);
+
+    /**
+     * 通过分类id查找菜品
+     *
+     * @param categoryId 分类id
+     * @return 菜品集合
+     */
+    List<Dish> getByCategoryId(Long categoryId);
+
+    /**
+     * 分页查询
+     * @param dishPageQueryDTO 查询条件
+     * @return
+     */
+    PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO);
 }
