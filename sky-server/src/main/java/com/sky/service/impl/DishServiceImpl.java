@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.BaseContext;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -162,6 +164,8 @@ public class DishServiceImpl implements DishService {
      */
     @Override
     public void status(Long id, Long status) {
-        dishMapper.status(id, status);
+        LocalDateTime updateTime = LocalDateTime.now();
+        Long updateUser = BaseContext.getCurrentId();
+        dishMapper.status(id, status, updateTime, updateUser);
     }
 }

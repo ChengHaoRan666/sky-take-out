@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -77,6 +78,7 @@ public interface DishMapper {
 
     /**
      * 根据id删除菜品
+     *
      * @param id 菜品id
      */
     @Delete("delete from dish where id = #{id};")
@@ -84,15 +86,16 @@ public interface DishMapper {
 
     /**
      * 修改菜品状态
+     *
      * @param id
      * @param status
      */
-    @AutoFill(OperationType.UPDATE)
-    @Update("update dish set status = #{status} where  id=#{id};")
-    void status(Long id, Long status);
+    @Update("update dish set status = #{status},update_time = #{updateTime}, update_user = #{updateUser} where  id = #{id};")
+    void status(Long id, Long status, LocalDateTime updateTime, Long updateUser);
 
     /**
      * 根据id删除菜品
+     *
      * @param ids 菜品id
      */
     void deleteByDishIds(List<Long> ids);
