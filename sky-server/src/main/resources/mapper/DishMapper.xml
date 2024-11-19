@@ -44,6 +44,13 @@
         </where>
     </update>
 
+    <delete id="deleteByDishIds">
+        delete from dish where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
 
     <!--开启返回值-->
     <insert id="addDish" useGeneratedKeys="true" keyProperty="id">

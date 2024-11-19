@@ -90,4 +90,10 @@ public interface DishMapper {
     @AutoFill(OperationType.UPDATE)
     @Update("update dish set status = #{status} where  id=#{id};")
     void status(Long id, Long status);
+
+    /**
+     * 根据id删除菜品
+     * @param ids 菜品id
+     */
+    void deleteByDishIds(List<Long> ids);
 }

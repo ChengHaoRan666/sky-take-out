@@ -145,10 +145,13 @@ public class DishServiceImpl implements DishService {
             throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
         }
 
-        for (Long id : ids) {
-            dishMapper.deleteByDishId(id);
-            dishFlavorMapper.deleteByDishId(id);
-        }
+//        for (Long id : ids) {
+//            dishMapper.deleteByDishId(id);
+//            dishFlavorMapper.deleteByDishId(id);
+//        }
+        // 优化，一次直接删除，不用遍历删除
+        dishMapper.deleteByDishIds(ids);
+        dishFlavorMapper.deleteByDishIds(ids);
     }
 
     /**
