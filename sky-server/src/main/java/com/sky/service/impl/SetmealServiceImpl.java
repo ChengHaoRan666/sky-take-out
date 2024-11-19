@@ -1,8 +1,18 @@
 package com.sky.service.impl;
 
+import com.sky.dto.SetmealDTO;
+import com.sky.entity.Setmeal;
+import com.sky.entity.SetmealDish;
+import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Author: 程浩然
@@ -12,5 +22,26 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class SetmealServiceImpl implements SetmealService {
+    @Autowired
+    private SetmealMapper setmealMapper;
+    @Autowired
+    private SetmealDishMapper setmealDishMapper;
 
+    /**
+     * 添加套餐和套餐菜品信息
+     *
+     * @param setmealDTO 套餐和套餐菜品信息
+     */
+    @Override
+    @Transactional
+    public void addSetmeal(SetmealDTO setmealDTO) {
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        setmealMapper.addSetmeal(setmeal);
+        Long setmealId = setmeal.getId();
+        for(SetmealDish setmealDish:setmealDishes)
+            setmealDish.setSetmealId(setmealId);
+        setmealDishMapper.addSetmealDish(setmealDishes);
+    }
 }

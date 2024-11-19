@@ -7,4 +7,9 @@
 <!--id 要和mapper 接口中的方法保持一致-->
 <mapper namespace="com.sky.mapper.SetmealMapper">
 
+    <insert id="addSetmeal" useGeneratedKeys="true" keyProperty="id">
+        insert into setmeal
+        (name,category_id , price, image, description,status, create_time, update_time, create_user, update_user)
+        values (#{name},#{categoryId},#{price},#{image},#{description},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser});
+    </insert>
 </mapper>

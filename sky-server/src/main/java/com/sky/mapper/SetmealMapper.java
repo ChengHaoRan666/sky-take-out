@@ -6,6 +6,9 @@ package com.sky.mapper;
  * @Description: 套餐Mapper接口
  */
 
+import com.sky.annotaion.AutoFill;
+import com.sky.entity.Setmeal;
+import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -21,5 +24,12 @@ public interface SetmealMapper {
     @Select("select count(id) from setmeal where category_id = #{categoryId}")
     Integer countByCategoryId(Long id);
 
+    /**
+     * 添加套餐
+     *
+     * @param setmeal 套餐
+     */
+    @AutoFill(OperationType.INSERT)
+    void addSetmeal(Setmeal setmeal);
 }
 
