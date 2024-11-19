@@ -49,6 +49,7 @@ public class DishServiceImpl implements DishService {
      * @return 菜品信息DishVO
      */
     @Override
+    @Transactional
     public DishVO getById(Long id) {
         Dish dish = dishMapper.getById(id);
         List<DishFlavor> dishFlavors = dishFlavorMapper.getById(id);
@@ -118,9 +119,16 @@ public class DishServiceImpl implements DishService {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);
         List<DishFlavor> dishFlavors = dishDTO.getFlavors();
+        Long dishId = dishDTO.getId();
         dishMapper.changeDish(dish);
         dishFlavorMapper.deleteByDishId(dish.getId()); // 删除口味表中这个商品口味
-        dishFlavorMapper.addDishFlavor(dishFlavors); // 重新插入口味
+        if (dishFlavors != null && !dishFlavors.isEmpty()) {
+            dishFlavors.forEach(dishFlavor -> {
+                dishFlavor.setDishId(dishId);
+            });
+            //向口味表插入n条数据
+            dishFlavorMapper.addDishFlavor(dishFlavors); // 重新插入口味
+        }
     }
 
     /**
