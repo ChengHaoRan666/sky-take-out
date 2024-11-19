@@ -45,6 +45,7 @@
     </update>
 
 
+    <!--开启返回值-->
     <insert id="addDish" useGeneratedKeys="true" keyProperty="id">
         insert into dish
         (name, category_id, price, image, description, create_time, update_time, create_user,update_user, status)
