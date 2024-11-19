@@ -70,8 +70,28 @@ public class DishController {
      */
     @PutMapping
     @ApiOperation("修改菜品")
-    public Result changeDish() {
+    public Result changeDish(@RequestBody DishDTO dishDTO) {
+        dishService.changeDish(dishDTO);
+        return Result.success();
+    }
 
+    /**
+     * 批量删除菜品信息
+     */
+    @DeleteMapping
+    @ApiOperation("批量删除菜品信息")
+    public Result deleteDish(@RequestParam("ids") List<Long> ids) {
+        dishService.deleteDish(ids);
+        return Result.success();
+    }
+
+    /**
+     * 菜品起售停售
+     */
+    @PostMapping("status/{status}")
+    @ApiOperation("菜品起售停售")
+    public Result status(@RequestParam("id") Long id, @PathVariable("status") Long status) {
+        dishService.status(id, status);
         return Result.success();
     }
 }

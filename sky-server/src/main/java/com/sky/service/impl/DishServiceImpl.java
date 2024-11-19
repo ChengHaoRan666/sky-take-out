@@ -94,4 +94,43 @@ public class DishServiceImpl implements DishService {
         Page<DishVO> page = dishMapper.pageQuery(dishPageQueryDTO);
         return new PageResult(page.getTotal(), page.getResult());
     }
+
+    /**
+     * 修改菜品
+     *
+     * @param dishDTO 修改菜品的信息
+     */
+    @Override
+    public void changeDish(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+        List<DishFlavor> dishFlavors = dishDTO.getFlavors();
+        dishMapper.changeDish(dish);
+        dishFlavorMapper.deleteByDishId(dish.getId()); // 删除口味表中这个商品口味
+        dishFlavorMapper.addDishFlavor(dishFlavors); // 重新插入口味
+    }
+
+    /**
+     * 删除菜品
+     *
+     * @param ids 根据id批量删除菜品
+     */
+    @Override
+    public void deleteDish(List<Long> ids) {
+        for (Long id : ids) {
+            dishMapper.deleteByDishId(id);
+            dishFlavorMapper.deleteByDishId(id);
+        }
+    }
+
+    /**
+     * 修改菜品状态
+     *
+     * @param id     菜品id
+     * @param status 菜品状态
+     */
+    @Override
+    public void status(Long id, Long status) {
+        dishMapper.status(id, status);
+    }
 }

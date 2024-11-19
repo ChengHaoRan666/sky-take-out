@@ -41,8 +41,30 @@ public interface DishService {
 
     /**
      * 分页查询
+     *
      * @param dishPageQueryDTO 查询条件
      * @return
      */
     PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO);
+
+    /**
+     * 修改菜品
+     *
+     * @param dishDTO 修改菜品的信息
+     */
+    void changeDish(DishDTO dishDTO);
+
+    /**
+     * 删除菜品
+     *
+     * @param ids 根据id批量删除菜品
+     */
+    void deleteDish(List<Long> ids);
+
+    /**
+     * 修改菜品状态
+     * @param id 菜品id
+     * @param status 菜品状态
+     */
+    void status(Long id, Long status);
 }
