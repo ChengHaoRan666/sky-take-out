@@ -98,6 +98,7 @@ public class SetmealServiceImpl implements SetmealService {
      * @param status 状态
      */
     @Override
+    @Transactional
     public void status(Long id, Integer status) {
         //起售套餐时，判断套餐内是否有停售菜品，有停售菜品提示"套餐内包含未启售菜品，无法启售"
         if (Objects.equals(status, StatusConstant.ENABLE)) {
