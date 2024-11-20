@@ -1,4 +1,4 @@
-package com.sky.controller.admin;
+package com.sky.controller.user;
 
 import com.sky.result.Result;
 import io.swagger.annotations.Api;
@@ -6,16 +6,18 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Author: 程浩然
- * @Create: 2024/11/20 - 18:59
+ * @Create: 2024/11/20 - 19:37
  * @Description: 店铺相关接口
  */
 @Api(tags = "店铺相关接口")
-@RestController("AdminShopController")
-@RequestMapping("/admin/shop")
+@RestController("UserShopController")
+@RequestMapping("/user/shop")
 @Slf4j
 public class ShopController {
     private final String KEY = "SHOPPING_STATUS";
@@ -28,14 +30,5 @@ public class ShopController {
     public Result<Integer> getState() {
         Integer status = (Integer) redisTemplate.opsForValue().get(KEY);
         return Result.success(status);
-    }
-
-
-    @PutMapping("/{status}")
-    @ApiOperation("设置营业状态")
-    public Result setState(@PathVariable("status") Integer status) {
-        // 在redis中设置营生状态
-        redisTemplate.opsForValue().set(KEY, status);
-        return Result.success();
     }
 }
