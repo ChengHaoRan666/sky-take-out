@@ -1,6 +1,7 @@
 package com.sky.service;
 
 import com.sky.dto.SetmealDTO;
+import com.sky.vo.SetmealVO;
 
 /**
  * @Author: 程浩然
@@ -14,4 +15,11 @@ public interface SetmealService {
      * @param setmealDTO 套餐和套餐菜品信息
      */
     void addSetmeal(SetmealDTO setmealDTO);
+
+    /**
+     * 根据id查询套餐
+     * @param id 套餐id
+     * @return 套餐VO
+     */
+    SetmealVO getById(Long id);
 }
