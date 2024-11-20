@@ -50,4 +50,10 @@ public interface SetmealService {
      * @param ids id的集合
      */
     void deleteByIds(List<Long> ids);
+
+    /**
+     * 修改套餐
+     * @param setmealDTO
+     */
+    void update(SetmealDTO setmealDTO);
 }

@@ -137,4 +137,14 @@ public class SetmealServiceImpl implements SetmealService {
         //删除套餐菜品关系表中的数据
         setmealDishMapper.deleteBySetmealId(ids);
     }
+
+    /**
+     * 修改套餐
+     * @param setmealDTO 修改信息
+     *TODO：注意套餐菜品表里id要没有，要先回显得到后再插入
+     */
+    @Override
+    public void update(SetmealDTO setmealDTO) {
+        log.info("修改套餐：{}", setmealDTO);
+    }
 }
