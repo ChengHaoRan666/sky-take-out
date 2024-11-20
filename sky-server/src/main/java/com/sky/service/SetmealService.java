@@ -42,7 +42,7 @@ public interface SetmealService {
      * @param id     套餐id
      * @param status 状态
      */
-    void status(Long id, Long status);
+    void status(Long id, Integer status);
 
     /**
      * 通过ids删除套餐

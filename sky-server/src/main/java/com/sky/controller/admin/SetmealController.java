@@ -64,7 +64,7 @@ public class SetmealController {
      */
     @PostMapping("/status/{status}")
     @ApiOperation("套餐起售、停售")
-    public Result status(@PathVariable("status") Long status, @RequestParam("id") Long id) {
+    public Result status(@PathVariable("status") Integer status, @RequestParam("id") Long id) {
         setmealService.status(id, status);
         return Result.success();
     }
@@ -76,6 +76,16 @@ public class SetmealController {
     @ApiOperation("批量删除套餐")
     public Result deleteByIds(@RequestParam("ids") List<Long> ids) {
         setmealService.deleteByIds(ids);
+        return Result.success();
+    }
+
+    /**
+     * 修改套餐
+     */
+    @PutMapping
+    @ApiOperation("修改套餐")
+    public Result update(@RequestBody SetmealDTO setmealDTO) {
+//        setmealService.update(setmealDTO);
         return Result.success();
     }
 }

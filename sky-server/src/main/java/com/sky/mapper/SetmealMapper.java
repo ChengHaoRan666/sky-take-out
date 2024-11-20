@@ -65,7 +65,7 @@ public interface SetmealMapper {
      * @param userId 修改人id
      */
     @Update("update setmeal set status = #{status}, update_time = #{time}, update_user = #{id} where id = #{id}")
-    void status(Long id, Long status, LocalDateTime time, Long userId);
+    void status(Long id, Integer status, LocalDateTime time, Long userId);
 
     /**
      * 根据id删除套餐
