@@ -31,4 +31,11 @@ public interface SetmealService {
      * @return 分页
      */
     PageResult page(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    /**
+     * 修改套餐状态
+     * @param id 套餐id
+     * @param status 状态
+     */
+    void status(Long id, Long status);
 }

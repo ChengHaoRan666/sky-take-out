@@ -14,6 +14,9 @@ import com.sky.enumeration.OperationType;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import java.time.LocalDateTime;
 
 @Mapper
 public interface SetmealMapper {
@@ -46,9 +49,21 @@ public interface SetmealMapper {
 
     /**
      * 分页查询
+     *
      * @param setmealPageQueryDTO 分页查询参数
      * @return 页面page
      */
     Page<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    /**
+     * 修改套餐状态
+     *
+     * @param id     套餐id
+     * @param status 要修改的状态
+     * @param time   修改时间
+     * @param userId 修改人id
+     */
+    @Update("update setmeal set status = #{status}, update_time = #{time}, update_user = #{id} where id = #{id}")
+    void status(Long id, Long status, LocalDateTime time, Long userId);
 }
 
