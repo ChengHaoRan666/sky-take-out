@@ -35,4 +35,10 @@ public interface SetmealDishMapper {
      */
     @Select("select * from setmeal_dish where setmeal_id = #{setmealId};")
     List<SetmealDish> getById(Long setmealId);
+
+    /**
+     * 删除套餐和菜品关系根据id
+     * @param ids id的集合
+     */
+    void deleteBySetmealId(List<Long> ids);
 }

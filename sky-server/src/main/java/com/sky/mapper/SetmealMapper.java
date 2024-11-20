@@ -17,6 +17,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Mapper
 public interface SetmealMapper {
@@ -65,5 +66,11 @@ public interface SetmealMapper {
      */
     @Update("update setmeal set status = #{status}, update_time = #{time}, update_user = #{id} where id = #{id}")
     void status(Long id, Long status, LocalDateTime time, Long userId);
+
+    /**
+     * 根据id删除套餐
+     * @param ids 套餐id集合
+     */
+    void deleteById(List<Long> ids);
 }
 
