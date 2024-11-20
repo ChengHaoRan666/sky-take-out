@@ -1,6 +1,8 @@
 package com.sky.service;
 
 import com.sky.dto.SetmealDTO;
+import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.result.PageResult;
 import com.sky.vo.SetmealVO;
 
 /**
@@ -22,4 +24,11 @@ public interface SetmealService {
      * @return 套餐VO
      */
     SetmealVO getById(Long id);
+
+    /**
+     * 分页查询
+     * @param setmealPageQueryDTO 分页查询参数
+     * @return 分页
+     */
+    PageResult page(SetmealPageQueryDTO setmealPageQueryDTO);
 }

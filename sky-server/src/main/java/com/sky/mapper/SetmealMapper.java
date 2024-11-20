@@ -6,7 +6,9 @@ package com.sky.mapper;
  * @Description: 套餐Mapper接口
  */
 
+import com.github.pagehelper.Page;
 import com.sky.annotaion.AutoFill;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Mapper;
@@ -40,5 +42,12 @@ public interface SetmealMapper {
      */
     @Select("select * from setmeal where id = #{id};")
     Setmeal getById(Long id);
+
+    /**
+     * 分页查询
+     * @param setmealPageQueryDTO 分页查询参数
+     * @return 页面page
+     */
+    Page<Setmeal> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 }
 
