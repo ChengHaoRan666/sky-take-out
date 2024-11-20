@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -140,11 +141,19 @@ public class SetmealServiceImpl implements SetmealService {
 
     /**
      * 修改套餐
+     *
      * @param setmealDTO 修改信息
-     *TODO：注意套餐菜品表里id要没有，要先回显得到后再插入
+     *                                                                                                             TODO：注意套餐菜品表里id要没有，要先回显得到后再插入
      */
     @Override
     public void update(SetmealDTO setmealDTO) {
-        log.info("修改套餐：{}", setmealDTO);
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO, setmeal);
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        setmealMapper.update(setmeal);
+        Long setmealId = setmeal.getId();
+        for (SetmealDish setmealDish : setmealDishes) setmealDish.setSetmealId(setmealId);
+        setmealDishMapper.deleteBySetmealId(Collections.singletonList(setmealId));
+        setmealDishMapper.addSetmealDish(setmealDishes);
     }
 }
