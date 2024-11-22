@@ -25,7 +25,7 @@ import java.util.Map;
  * @Create: 2024/11/22 - 9:24
  * @Description: c端用户控制层
  */
-@Api(tags = "c端用户相关接口")
+@Api(tags = "C端-用户相关接口")
 @RestController
 @RequestMapping("/user/user")
 @Slf4j
