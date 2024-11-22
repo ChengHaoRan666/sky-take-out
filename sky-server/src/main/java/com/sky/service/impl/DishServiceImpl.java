@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -175,5 +176,26 @@ public class DishServiceImpl implements DishService {
         LocalDateTime updateTime = LocalDateTime.now();
         Long updateUser = BaseContext.getCurrentId();
         dishMapper.status(id, status, updateTime, updateUser);
+    }
+
+    /**
+     * 通过分类id查询菜品
+     *
+     * @param categoryId 分类id
+     * @return 菜品VO
+     */
+    @Override
+    @Transactional
+    public List<DishVO> listWithFlavor(Long categoryId) {
+        List<Dish> dishes = getByCategoryId(categoryId);
+        List<DishVO> dishVOs = new ArrayList<>();
+        for (Dish dish : dishes) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(dish, dishVO);
+            List<DishFlavor> flavors = dishFlavorMapper.getById(dish.getId());
+            dishVO.setFlavors(flavors);
+            dishVOs.add(dishVO);
+        }
+        return dishVOs;
     }
 }
