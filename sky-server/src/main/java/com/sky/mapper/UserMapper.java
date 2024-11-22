@@ -1,7 +1,6 @@
 package com.sky.mapper;
 
 import com.sky.entity.User;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -27,7 +26,5 @@ public interface UserMapper {
      *
      * @param user 用户信息
      */
-    @Insert("insert into user (id, openid, name, phone, sex, id_number, avatar, create_time)" +
-            " values (#{user.id},#{user.openid},#{user.name},#{user.phone},#{user.sex},#{user.idNumber},#{user.avatar},#{user.createTime});")
     void insert(User user);
 }
