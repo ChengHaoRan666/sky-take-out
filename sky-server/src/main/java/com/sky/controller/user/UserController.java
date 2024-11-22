@@ -54,4 +54,10 @@ public class UserController {
                 .build();
         return Result.success(userLoginVO);
     }
+
+    @PostMapping("/logout")
+    @ApiOperation("用户退出")
+    public Result logOut() {
+        return Result.success();
+    }
 }
