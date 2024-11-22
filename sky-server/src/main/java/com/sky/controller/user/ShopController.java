@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Create: 2024/11/20 - 19:37
  * @Description: 店铺相关接口
  */
-@Api(tags = "店铺相关接口")
+@Api(tags = "C端-店铺相关接口")
 @RestController("UserShopController")
 @RequestMapping("/user/shop")
 @Slf4j
