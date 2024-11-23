@@ -44,8 +44,17 @@ public interface shoppingCartMapper {
 
     /**
      * 根据userId删除购物车信息
+     *
      * @param userId 用户id
      */
     @Delete("delete from shopping_cart where user_id = #{userId};")
     void clear(Long userId);
+
+    /**
+     * 通过购物车id删除购物车商品
+     *
+     * @param id id
+     */
+    @Delete("delete from shopping_cart where id = #{id};")
+    void deleteById(Long id);
 }
