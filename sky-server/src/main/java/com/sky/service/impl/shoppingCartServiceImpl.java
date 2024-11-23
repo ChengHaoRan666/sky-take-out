@@ -118,6 +118,5 @@ public class shoppingCartServiceImpl implements shoppingCartService {
                 shoppingCartMapper.updateNumber(shoppingCart);
             }
         }
-
     }
 }
