@@ -243,4 +243,51 @@ public class OrderServiceImpl implements OrderService {
         // 将购物车对象批量添加到数据库
         shoppingCartMapper.insertBatch(shoppingCartList);
     }
+
+    /**
+     * 商家搜索订单
+     *
+     * @param ordersPageQueryDTO 搜索项
+     * @return 订单信息
+     */
+    @Override
+    @Transactional
+    public PageResult conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        // 查找的有两项，一是订单的信息，二是订单中菜品的信息
+        // 得到订单信息
+        Page<Orders> orders = orderMapper.pageQuery(ordersPageQueryDTO);
+        // 将订单order转为orderVO，将菜品信息也变为字符串加进去
+        List<OrderVO> orderVOS = new ArrayList<>();
+
+        for (Orders order : orders) {
+            OrderVO orderVO = new OrderVO();
+            BeanUtils.copyProperties(order, orderVO);
+            String orderDishes = getOrderDishesStr(order);
+            orderVO.setOrderDishes(orderDishes);
+            orderVOS.add(orderVO);
+        }
+
+        return new PageResult(orders.getTotal(), orderVOS);
+    }
+
+    /**
+     * 根据订单id获取菜品信息字符串
+     *
+     * @param orders 订单信息
+     * @return 订单中菜品转换为的字符串
+     */
+    private String getOrderDishesStr(Orders orders) {
+        // 查询订单菜品详情信息（订单中的菜品和数量）
+        List<OrderDetail> orderDetailList = orderDetailMapper.detail(orders.getId());
+
+        // 将每一条订单菜品信息拼接为字符串（格式：宫保鸡丁*3；）
+        List<String> orderDishList = orderDetailList.stream().map(x -> {
+            String orderDish = x.getName() + "*" + x.getNumber() + ";";
+            return orderDish;
+        }).collect(Collectors.toList());
+
+        // 将该订单对应的所有菜品信息拼接在一起
+        return String.join("", orderDishList);
+    }
 }
