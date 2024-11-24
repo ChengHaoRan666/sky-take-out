@@ -3,6 +3,7 @@ package com.sky.controller.user;
 
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
@@ -38,18 +39,28 @@ public class OrderController {
 //        return Result.success();
 //    }
 
+    /**
+     * 再来一单就是将订单里的商品重新添加到购物车中
+     *
+     * @param id
+     * @return
+     */
     @ApiOperation("再来一单")
     @PostMapping("/repetition/{id}")
     public Result repetition(@PathVariable("id") Long id) {
-
+        orderService.repetition(id);
         return Result.success();
     }
 
 
     @ApiOperation("历史订单查询")
     @GetMapping("/historyOrders")
-    public void historyOrders() {
-
+    public Result<PageResult> historyOrders(
+            @RequestParam("page") int page,
+            @RequestParam("pageSize") int pageSize,
+            @RequestParam(value = "status", required = false) Integer status) {
+        PageResult pageResult = orderService.pageQuery(page, pageSize, status);
+        return Result.success(pageResult);
     }
 
     @ApiOperation("取消订单")

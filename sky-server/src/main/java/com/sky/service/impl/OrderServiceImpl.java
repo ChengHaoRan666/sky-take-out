@@ -1,7 +1,10 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.AddressBook;
 import com.sky.entity.OrderDetail;
@@ -12,6 +15,7 @@ import com.sky.mapper.AddressBookMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.orderDetailMapper;
 import com.sky.mapper.shoppingCartMapper;
+import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
@@ -24,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: 程浩然
@@ -128,5 +133,74 @@ public class OrderServiceImpl implements OrderService {
     public void cancel(Long orderId) {
         orderMapper.deleteByOrderId(orderId);
         orderDetailMapper.deleteByOrderId(orderId);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param page     当前页码
+     * @param pageSize 每页数量
+     * @param status   订单状态
+     * @return 集合
+     */
+    @Override
+    public PageResult pageQuery(int page, int pageSize, Integer status) {
+        // 设置分页
+        PageHelper.startPage(page, pageSize);
+
+        OrdersPageQueryDTO ordersPageQueryDTO = new OrdersPageQueryDTO();
+        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());
+        ordersPageQueryDTO.setStatus(status);
+
+        // 分页条件查询
+        Page<Orders> orderPage = orderMapper.pageQuery(ordersPageQueryDTO);
+
+        List<OrderVO> list = new ArrayList();
+
+        // 查询出订单明细，并封装入OrderVO进行响应
+        if (orderPage != null && orderPage.getTotal() > 0) {
+            for (Orders orders : orderPage) {
+                Long orderId = orders.getId();// 订单id
+
+                // 查询订单明细
+                List<OrderDetail> orderDetails = orderDetailMapper.detail(orderId);
+
+                OrderVO orderVO = new OrderVO();
+                BeanUtils.copyProperties(orders, orderVO);
+                orderVO.setOrderDetailList(orderDetails);
+
+                list.add(orderVO);
+            }
+        }
+        return new PageResult(orderPage.getTotal(), list);
+    }
+
+    /**
+     * 再来一单
+     *
+     * @param id
+     */
+    @Override
+    public void repetition(Long id) {
+        // 查询当前用户id
+        Long userId = BaseContext.getCurrentId();
+
+        // 根据订单id查询当前订单详情
+        List<OrderDetail> orderDetailList = orderDetailMapper.detail(id);
+
+        // 将订单详情对象转换为购物车对象
+        List<ShoppingCart> shoppingCartList = orderDetailList.stream().map(x -> {
+            ShoppingCart shoppingCart = new ShoppingCart();
+
+            // 将原订单详情里面的菜品信息重新复制到购物车对象中
+            BeanUtils.copyProperties(x, shoppingCart, "id");
+            shoppingCart.setUserId(userId);
+            shoppingCart.setCreateTime(LocalDateTime.now());
+
+            return shoppingCart;
+        }).collect(Collectors.toList());
+
+        // 将购物车对象批量添加到数据库
+        shoppingCartMapper.insertBatch(shoppingCartList);
     }
 }

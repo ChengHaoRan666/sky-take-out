@@ -1,5 +1,7 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -40,6 +42,7 @@ public interface OrderMapper {
 
     /**
      * 通过订单id获取订单信息
+     *
      * @param orderId 订单id
      * @return 订单信息
      */
@@ -48,8 +51,19 @@ public interface OrderMapper {
 
     /**
      * 根据订单id删除订单
+     *
      * @param orderId 订单id
      */
     @Delete("delete from orders where id = #{orderId};")
     void deleteByOrderId(Long orderId);
+
+    /**
+     * 分页查询
+     *
+     * @param page     当前页码
+     * @param pageSize 每页数量
+     * @param status   订单状态
+     * @return
+     */
+    Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
 }
