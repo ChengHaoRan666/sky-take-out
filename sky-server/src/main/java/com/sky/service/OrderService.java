@@ -33,7 +33,7 @@ public interface OrderService {
      *
      * @param orderId 订单id
      */
-    void cancel(Long orderId);
+    void cancel(Long orderId) throws Exception;
 
     /**
      * 分页查询

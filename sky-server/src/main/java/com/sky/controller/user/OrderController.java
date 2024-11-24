@@ -65,7 +65,7 @@ public class OrderController {
 
     @ApiOperation("取消订单")
     @PutMapping("/cancel/{id}")
-    public Result cancel(@PathVariable("id") Long orderId) {
+    public Result cancel(@PathVariable("id") Long orderId) throws Exception {
         orderService.cancel(orderId);
         return Result.success();
     }
