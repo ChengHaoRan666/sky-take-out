@@ -14,6 +14,7 @@ import com.sky.mapper.orderDetailMapper;
 import com.sky.mapper.shoppingCartMapper;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,5 +99,34 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         return orderSubmitVO;
+    }
+
+    /**
+     * 通过订单id查询订单信息
+     *
+     * @param orderId 订单id
+     * @return 订单信息
+     */
+    @Override
+    @Transactional
+    public OrderVO detail(Long orderId) {
+        Orders order = orderMapper.detail(orderId);
+        List<OrderDetail> orderDetailList = orderDetailMapper.detail(orderId);
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(order, orderVO);
+        orderVO.setOrderDetailList(orderDetailList);
+        return orderVO;
+    }
+
+    /**
+     * 根据订单id取消订单
+     *
+     * @param orderId 订单id
+     */
+    @Override
+    @Transactional
+    public void cancel(Long orderId) {
+        orderMapper.deleteByOrderId(orderId);
+        orderDetailMapper.deleteByOrderId(orderId);
     }
 }

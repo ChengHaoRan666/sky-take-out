@@ -7,6 +7,7 @@ import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -36,34 +37,37 @@ public class OrderController {
 //
 //        return Result.success();
 //    }
-//
-//    @ApiOperation("再来一单")
-//    @PostMapping("/repetition/{id}")
-//    public Result repetition(@PathVariable("id") Long id) {
-//
-//        return Result.success();
-//    }
-//
-//
-//    @ApiOperation("历史订单查询")
-//    @GetMapping("/historyOrders")
-//    public void historyOrders() {
-//
-//    }
-//
-//    @ApiOperation("取消订单")
-//    @PutMapping("/cancel/{id}")
-//    public void cancel() {
-//
-//    }
-//
-//
-//    @ApiOperation("查询订单详情")
-//    @GetMapping("/orderDetail/{id}")
-//    public void orderDetail() {
-//
-//    }
-//
+
+    @ApiOperation("再来一单")
+    @PostMapping("/repetition/{id}")
+    public Result repetition(@PathVariable("id") Long id) {
+
+        return Result.success();
+    }
+
+
+    @ApiOperation("历史订单查询")
+    @GetMapping("/historyOrders")
+    public void historyOrders() {
+
+    }
+
+    @ApiOperation("取消订单")
+    @PutMapping("/cancel/{id}")
+    public Result cancel(@PathVariable("id") Long orderId) {
+        orderService.cancel(orderId);
+        return Result.success();
+    }
+
+
+    @ApiOperation("查询订单详情")
+    @GetMapping("/orderDetail/{id}")
+    public Result<OrderVO> orderDetail(@PathVariable("id") Long orderId) {
+        OrderVO orderVO = orderService.detail(orderId);
+        return Result.success(orderVO);
+    }
+
+
     @ApiOperation("用户下单")
     @PostMapping("/submit")
     public Result<OrderSubmitVO> submit(@RequestBody OrdersSubmitDTO ordersSubmitDTO) {

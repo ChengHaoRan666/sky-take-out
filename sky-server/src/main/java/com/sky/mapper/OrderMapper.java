@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.sky.entity.Orders;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -35,4 +36,20 @@ public interface OrderMapper {
      * @param orders 订单信息
      */
     void update(Orders orders);
+
+
+    /**
+     * 通过订单id获取订单信息
+     * @param orderId 订单id
+     * @return 订单信息
+     */
+    @Select("select * from orders where id = #{orderId};")
+    Orders detail(Long orderId);
+
+    /**
+     * 根据订单id删除订单
+     * @param orderId 订单id
+     */
+    @Delete("delete from orders where id = #{orderId};")
+    void deleteByOrderId(Long orderId);
 }

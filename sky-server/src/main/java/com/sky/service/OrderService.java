@@ -2,6 +2,7 @@ package com.sky.service;
 
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 
 /**
  * @Author: 程浩然
@@ -17,4 +18,19 @@ public interface OrderService {
      * @return OrderSubmitVO
      */
     OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO);
+
+    /**
+     * 通过订单id查询订单信息
+     *
+     * @param orderId 订单id
+     * @return 订单信息
+     */
+    OrderVO detail(Long orderId);
+
+    /**
+     * 根据订单id取消订单
+     *
+     * @param orderId 订单id
+     */
+    void cancel(Long orderId);
 }
