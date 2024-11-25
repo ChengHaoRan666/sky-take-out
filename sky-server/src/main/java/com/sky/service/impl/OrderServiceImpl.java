@@ -4,10 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersConfirmDTO;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersRejectionDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.AddressBook;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
@@ -34,6 +31,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -353,10 +351,6 @@ public class OrderServiceImpl implements OrderService {
         // 如果用户已经支付了
         if (orders.getPayStatus() == Orders.PAID) {
             //调用微信支付退款接口
-            weChatPayUtil.refund(orders.getNumber(), //商户订单号
-                    orders.getNumber(), //商户退款单号
-                    new BigDecimal(0.01),//退款金额，单位 元
-                    new BigDecimal(0.01));//原订单金额
 
             //支付状态修改为 退款
             orders.setPayStatus(Orders.REFUND);
@@ -366,5 +360,74 @@ public class OrderServiceImpl implements OrderService {
         orders.setCancelTime(LocalDateTime.now());
         // 修改订单状态为已取消
         orderMapper.update(orders);
+    }
+
+    /**
+     * 商家取消订单
+     *
+     * @param ordersCancelDTO 订单信息
+     */
+    @Override
+    public void adminCancel(OrdersCancelDTO ordersCancelDTO) throws Exception {
+        // 根据id查询订单
+        Orders ordersDB = orderMapper.detail(ordersCancelDTO.getId());
+
+        //支付状态
+        Integer payStatus = ordersDB.getPayStatus();
+        if (payStatus == 1) {
+            //用户已支付，需要退款
+            String refund = weChatPayUtil.refund(
+                    ordersDB.getNumber(),
+                    ordersDB.getNumber(),
+                    new BigDecimal(0.01),
+                    new BigDecimal(0.01));
+        }
+
+        // 管理端取消订单需要退款，根据订单id更新订单状态、取消原因、取消时间
+        Orders orders = new Orders();
+        orders.setId(ordersCancelDTO.getId());
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelReason(ordersCancelDTO.getCancelReason());
+        orders.setCancelTime(LocalDateTime.now());
+        orderMapper.update(orders);
+    }
+
+
+    /**
+     * 派送订单
+     * 将状态修改为"派送中"
+     * 只有待派送的订单才可以执行派送
+     *
+     * @param id 订单信息
+     */
+    @Override
+    public void delivery(Long id) {
+        Orders orders = orderMapper.detail(id);
+        if (orders == null || !Objects.equals(orders.getStatus(), Orders.CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        Orders orders1 = new Orders();
+        orders1.setId(id); // 设置订单 id
+        orders1.setStatus(Orders.DELIVERY_IN_PROGRESS); // 设置订单状态
+        orderMapper.update(orders1);
+    }
+
+
+    /**
+     * 完成订单
+     *
+     * @param id 订单id
+     */
+    @Override
+    public void complete(Long id) {
+        Orders orders = orderMapper.detail(id);
+        if (orders == null || !Objects.equals(orders.getStatus(), Orders.DELIVERY_IN_PROGRESS)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        Orders orders1 = new Orders();
+        orders1.setId(id); // 设置订单 id
+        orders1.setStatus(Orders.COMPLETED); // 设置订单状态
+        orders1.setDeliveryTime(LocalDateTime.now());
+        orderMapper.update(orders1);
     }
 }
