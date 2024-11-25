@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * @Author: 程浩然
  * @Create: 2024/11/23 - 14:43
@@ -75,4 +78,13 @@ public interface OrderMapper {
      */
     @Select("select COUNT(*) from orders where status = #{status};")
     Integer statistics(int status);
+
+
+    /**
+     * 根据状态和下单时间查询订单
+     * @param status
+     * @param orderTime
+     */
+    @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
+    List<Orders> getByStatusAndOrdertimeLT(Integer status, LocalDateTime orderTime);
 }
