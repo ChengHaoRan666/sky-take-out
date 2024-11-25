@@ -83,6 +83,7 @@ public class OrderController {
     @PostMapping("/submit")
     public Result<OrderSubmitVO> submit(@RequestBody OrdersSubmitDTO ordersSubmitDTO) {
         OrderSubmitVO orderSubmitVO = orderService.submit(ordersSubmitDTO);
+        log.info("{}", orderSubmitVO);
         return Result.success(orderSubmitVO);
     }
 

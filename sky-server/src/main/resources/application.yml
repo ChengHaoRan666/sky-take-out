@@ -71,3 +71,10 @@ sky:
     weChatPayCertFilePath: ${sky.wechat.weChatPayCertFilePath}
     notifyUrl: ${sky.wechat.notifyUrl}
     refundNotifyUrl: ${sky.wechat.refundNotifyUrl}
+
+  # 商店地址
+  shop:
+    address: 河南省许昌市许昌学院
+
+  baidu:
+    ak: ${sky.baidu.ak}
