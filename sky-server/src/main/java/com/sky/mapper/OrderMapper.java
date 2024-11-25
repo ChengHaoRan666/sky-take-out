@@ -66,4 +66,13 @@ public interface OrderMapper {
      * @return
      */
     Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /**
+     * 根据订单状态搜索该状态数量
+     *
+     * @param status 订单状态
+     * @return 该状态订单数量
+     */
+    @Select("select COUNT(*) from orders where status = #{status};")
+    Integer statistics(int status);
 }

@@ -19,6 +19,7 @@ import com.sky.mapper.shoppingCartMapper;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
@@ -102,11 +103,7 @@ public class OrderServiceImpl implements OrderService {
         // 4. 清空购物车数据
         shoppingCartMapper.clear(userId);
         // 5. 构造返回值返回
-        OrderSubmitVO orderSubmitVO = OrderSubmitVO.builder()
-                .orderTime(LocalDateTime.now())
-                .orderNumber(order.getNumber())
-                .orderAmount(order.getAmount())
-                .build();
+        OrderSubmitVO orderSubmitVO = OrderSubmitVO.builder().orderTime(LocalDateTime.now()).orderNumber(order.getNumber()).orderAmount(order.getAmount()).build();
 
         return orderSubmitVO;
     }
@@ -158,8 +155,7 @@ public class OrderServiceImpl implements OrderService {
         // 订单处于待接单状态下取消，需要进行退款
         if (ordersDB.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
             //调用微信支付退款接口
-            weChatPayUtil.refund(
-                    ordersDB.getNumber(), //商户订单号
+            weChatPayUtil.refund(ordersDB.getNumber(), //商户订单号
                     ordersDB.getNumber(), //商户退款单号
                     new BigDecimal(0.01),//退款金额，单位 元
                     new BigDecimal(0.01));//原订单金额
@@ -271,6 +267,7 @@ public class OrderServiceImpl implements OrderService {
         return new PageResult(orders.getTotal(), orderVOS);
     }
 
+
     /**
      * 根据订单id获取菜品信息字符串
      *
@@ -289,5 +286,22 @@ public class OrderServiceImpl implements OrderService {
 
         // 将该订单对应的所有菜品信息拼接在一起
         return String.join("", orderDishList);
+    }
+
+    /**
+     * 各个状态的订单数量统计
+     *
+     * @return 统计结果
+     */
+    @Override
+    public OrderStatisticsVO statistics() {
+        OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
+        Integer statistic1 = orderMapper.statistics(2); // 待接单数量
+        Integer statistic2 = orderMapper.statistics(3); // 待派送数量
+        Integer statistic3 = orderMapper.statistics(4); // 派送中数量
+        orderStatisticsVO.setToBeConfirmed(statistic1);
+        orderStatisticsVO.setConfirmed(statistic2);
+        orderStatisticsVO.setDeliveryInProgress(statistic3);
+        return orderStatisticsVO;
     }
 }
