@@ -324,7 +324,9 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void payment(String orderNumber) {
-        Orders orders = Orders.builder().number(orderNumber).status(Orders.TO_BE_CONFIRMED).build();
+        Long userId = BaseContext.getCurrentId();
+        Orders orders = orderMapper.getByNumberAndUserId(orderNumber, userId);
+        orders.setStatus(Orders.REFUND);
         orderMapper.update(orders);
     }
 }
