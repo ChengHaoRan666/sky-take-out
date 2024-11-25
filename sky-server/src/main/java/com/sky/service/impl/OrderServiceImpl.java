@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersConfirmDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.AddressBook;
@@ -303,5 +304,27 @@ public class OrderServiceImpl implements OrderService {
         orderStatisticsVO.setConfirmed(statistic2);
         orderStatisticsVO.setDeliveryInProgress(statistic3);
         return orderStatisticsVO;
+    }
+
+    /**
+     * 接单，修改订单状态为已接单
+     *
+     * @param ordersConfirmDTO
+     */
+    @Override
+    public void confirm(OrdersConfirmDTO ordersConfirmDTO) {
+        Orders orders = Orders.builder().id(ordersConfirmDTO.getId()).status(Orders.CONFIRMED).build();
+        orderMapper.update(orders);
+    }
+
+    /**
+     * 付款，修改订单状态为已付款
+     *
+     * @param orderNumber 订单号
+     */
+    @Override
+    public void payment(String orderNumber) {
+        Orders orders = Orders.builder().number(orderNumber).status(Orders.TO_BE_CONFIRMED).build();
+        orderMapper.update(orders);
     }
 }

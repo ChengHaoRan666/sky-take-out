@@ -91,6 +91,7 @@ public class OrderController {
     @PutMapping("/payment")
     public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) {
         log.info("订单支付：{}", ordersPaymentDTO);
+        orderService.payment(ordersPaymentDTO.getOrderNumber());
         OrderPaymentVO orderPaymentVO = new OrderPaymentVO();
         return Result.success(orderPaymentVO);
     }

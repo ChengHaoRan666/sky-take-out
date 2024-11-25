@@ -1,5 +1,6 @@
 package com.sky.service;
 
+import com.sky.dto.OrdersConfirmDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
@@ -49,12 +50,14 @@ public interface OrderService {
 
     /**
      * 再来一单
+     *
      * @param id
      */
     void repetition(Long id);
 
     /**
      * 商家搜索订单
+     *
      * @param ordersPageQueryDTO 搜索项
      * @return 订单信息
      */
@@ -62,7 +65,22 @@ public interface OrderService {
 
     /**
      * 各个状态的订单数量统计
+     *
      * @return 统计结果
      */
     OrderStatisticsVO statistics();
+
+    /**
+     * 接单，修改订单状态为已接单
+     *
+     * @param ordersConfirmDTO
+     */
+    void confirm(OrdersConfirmDTO ordersConfirmDTO);
+
+    /**
+     * 付款，修改订单状态为已付款
+     *
+     * @param orderNumber 订单号
+     */
+    void payment(String orderNumber);
 }
