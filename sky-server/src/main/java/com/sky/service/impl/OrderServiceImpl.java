@@ -296,9 +296,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderStatisticsVO statistics() {
         OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
-        Integer statistic1 = orderMapper.statistics(2); // 待接单数量
-        Integer statistic2 = orderMapper.statistics(3); // 待派送数量
-        Integer statistic3 = orderMapper.statistics(4); // 派送中数量
+        Integer statistic1 = orderMapper.statistics(Orders.TO_BE_CONFIRMED); // 待接单数量
+        Integer statistic2 = orderMapper.statistics(Orders.CONFIRMED); // 待派送数量
+        Integer statistic3 = orderMapper.statistics(Orders.DELIVERY_IN_PROGRESS); // 派送中数量
         orderStatisticsVO.setToBeConfirmed(statistic1);
         orderStatisticsVO.setConfirmed(statistic2);
         orderStatisticsVO.setDeliveryInProgress(statistic3);
