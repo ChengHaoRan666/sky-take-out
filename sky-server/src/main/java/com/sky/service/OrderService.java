@@ -2,6 +2,7 @@ package com.sky.service;
 
 import com.sky.dto.OrdersConfirmDTO;
 import com.sky.dto.OrdersPageQueryDTO;
+import com.sky.dto.OrdersRejectionDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
 import com.sky.vo.OrderStatisticsVO;
@@ -83,4 +84,10 @@ public interface OrderService {
      * @param orderNumber 订单号
      */
     void payment(String orderNumber);
+
+    /**
+     * 拒单
+     * @param ordersRejectionDTO 拒单信息
+     */
+    void rejection(OrdersRejectionDTO ordersRejectionDTO) throws Exception;
 }
