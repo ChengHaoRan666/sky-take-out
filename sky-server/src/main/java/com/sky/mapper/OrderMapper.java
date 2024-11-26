@@ -6,6 +6,7 @@ import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDateTime;
@@ -108,4 +109,16 @@ public interface OrderMapper {
      * @return
      */
     List<GoodsSalesDTO> topTen(LocalDateTime begin, LocalDateTime end);
+
+    /**
+     * 通过开始时间和结束时间获取订单统计接口
+     *
+     * @param beginTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    Integer ordersStatistics(
+            @Param("beginTime") LocalDateTime beginTime,
+            @Param("endTime") LocalDateTime endTime,
+            @Param("status") Integer status);
 }

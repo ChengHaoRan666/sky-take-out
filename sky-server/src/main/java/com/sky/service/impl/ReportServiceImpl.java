@@ -2,8 +2,10 @@ package com.sky.service.impl;
 
 import com.sky.dto.DataOverViewQueryDTO;
 import com.sky.dto.GoodsSalesDTO;
+import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
 import com.sky.service.ReportService;
+import com.sky.vo.OrderReportVO;
 import com.sky.vo.SalesTop10ReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,6 +59,69 @@ public class ReportServiceImpl implements ReportService {
         return SalesTop10ReportVO.builder()
                 .nameList(nameList)
                 .numberList(numberList)
+                .build();
+    }
+
+
+    /**
+     * 订单统计
+     *
+     * @param dataOverViewQueryDTO 开始时间和结束时间
+     * @return 订单统计信息
+     */
+    @Override
+    public OrderReportVO ordersStatistics(DataOverViewQueryDTO dataOverViewQueryDTO) {
+        List<LocalDate> dataList = new ArrayList<>(); // 日期集合
+        List<Integer> orderCountList = new ArrayList<>(); // 每日订单数集合
+        List<Integer> validOrderCountList = new ArrayList<>();// 每日有效订单数集合
+        Integer totalOrderCount = 0; // 订单总数
+        Integer totalValidOrderCount = 0;// 有效订单总数
+        Double orderCompletionRate = 0.0; // 订单完成率
+
+        LocalDate begin = dataOverViewQueryDTO.getBegin();
+        LocalDate end = dataOverViewQueryDTO.getEnd();
+
+        while (!begin.isAfter(end)) {
+            // 设置具体开始时间和结束时间为这一天
+            LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(begin, LocalTime.MAX);
+            // 查找这一天的全部订单
+            Integer allOrderCount = orderMapper.ordersStatistics(beginTime, endTime, null);
+            // 查找这一天的有效订单
+            Integer validOrderCount = orderMapper.ordersStatistics(beginTime, endTime, Orders.COMPLETED);
+            // 如果今天全部订单数不为空，就把今天的日期加到日期集合，订单数加到订单集合
+            if (allOrderCount != 0) {
+                dataList.add(begin);
+                orderCountList.add(allOrderCount);
+            }
+
+            // 如果今天有效订单不为空，就将有效订单数加到有效订单数集合中
+            if (validOrderCount != 0) {
+                validOrderCountList.add(validOrderCount);
+            }
+            begin = begin.plusDays(1);
+        }
+
+        totalOrderCount = orderCountList.stream().mapToInt(Integer::intValue).sum();
+        totalValidOrderCount = validOrderCountList.stream().mapToInt(Integer::intValue).sum();
+
+        orderCompletionRate = totalOrderCount == 0 ? 0.0 : totalValidOrderCount.doubleValue() / totalOrderCount;
+
+
+        // 将日期列表转换为字符串
+        String dataString = dataList.stream().map(LocalDate::toString).collect(Collectors.joining(","));
+        // 将每日订单数列表转换为字符串
+        String orderCountString = orderCountList.stream().map(Object::toString).collect(Collectors.joining(","));
+        // 将每日有效订单数列表转换为字符串
+        String validOrderCountString = validOrderCountList.stream().map(Object::toString).collect(Collectors.joining(","));
+
+        return OrderReportVO.builder()
+                .dateList(dataString)
+                .orderCountList(orderCountString)
+                .validOrderCountList(validOrderCountString)
+                .totalOrderCount(totalOrderCount)
+                .validOrderCount(totalValidOrderCount)
+                .orderCompletionRate(orderCompletionRate)
                 .build();
     }
 }
