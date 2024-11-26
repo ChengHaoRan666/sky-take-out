@@ -5,6 +5,7 @@ import com.sky.result.Result;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
 import com.sky.vo.SalesTop10ReportVO;
+import com.sky.vo.TurnoverReportVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -38,5 +39,13 @@ public class ReportController {
     public Result<OrderReportVO> ordersStatistics(DataOverViewQueryDTO dataOverViewQueryDTO) {
         OrderReportVO orderReportVO = reportService.ordersStatistics(dataOverViewQueryDTO);
         return Result.success(orderReportVO);
+    }
+
+
+    @ApiOperation("营业额统计接口")
+    @GetMapping("/turnoverStatistics")
+    public Result<TurnoverReportVO> turnoverStatistics(DataOverViewQueryDTO dataOverViewQueryDTO) {
+        TurnoverReportVO turnoverReportVO = reportService.turnoverStatistics(dataOverViewQueryDTO);
+        return Result.success(turnoverReportVO);
     }
 }

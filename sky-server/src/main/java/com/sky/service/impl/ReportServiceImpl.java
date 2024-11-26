@@ -7,6 +7,7 @@ import com.sky.mapper.OrderMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
 import com.sky.vo.SalesTop10ReportVO;
+import com.sky.vo.TurnoverReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -122,6 +123,41 @@ public class ReportServiceImpl implements ReportService {
                 .totalOrderCount(totalOrderCount)
                 .validOrderCount(totalValidOrderCount)
                 .orderCompletionRate(orderCompletionRate)
+                .build();
+    }
+
+
+    /**
+     * 营业额统计接口
+     *
+     * @param dataOverViewQueryDTO 开始时间和结束时间
+     * @return 营业额统计信息
+     */
+    @Override
+    public TurnoverReportVO turnoverStatistics(DataOverViewQueryDTO dataOverViewQueryDTO) {
+        List<Double> turnoverList = new ArrayList<>();
+        List<LocalDate> dataList = new ArrayList<>();
+        LocalDate begin = dataOverViewQueryDTO.getBegin();
+        LocalDate end = dataOverViewQueryDTO.getEnd();
+        while (!begin.isAfter(end)) {
+            LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(begin, LocalTime.MAX);
+            Double turnover = orderMapper.getTurnover(beginTime, endTime);
+            if (turnover != null) {
+                turnoverList.add(turnover);
+                dataList.add(begin);
+            }
+            begin = begin.plusDays(1);
+        }
+
+        // list转为String
+        String dataString = dataList.stream().map(LocalDate::toString).collect(Collectors.joining(","));
+        String turnoverString = turnoverList.stream().map(Object::toString).collect(Collectors.joining(","));
+
+        return TurnoverReportVO
+                .builder()
+                .dateList(dataString)
+                .turnoverList(turnoverString)
                 .build();
     }
 }

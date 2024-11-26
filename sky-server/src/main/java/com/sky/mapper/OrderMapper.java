@@ -121,4 +121,15 @@ public interface OrderMapper {
             @Param("beginTime") LocalDateTime beginTime,
             @Param("endTime") LocalDateTime endTime,
             @Param("status") Integer status);
+
+    /**
+     * 根据开始时间和结束时间计算这段时间的营业额
+     *
+     * @param beginTime 开始时间
+     * @param endTime   结束时间
+     * @return 营业额
+     */
+    Double getTurnover(
+            @Param("beginTime") LocalDateTime beginTime,
+            @Param("endTime") LocalDateTime endTime);
 }
