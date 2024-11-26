@@ -32,12 +32,12 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    //    @ApiImplicitParam("催单")
-//    @GetMapping("/reminder/{id}")
-//    public Result reminder(@PathVariable("id") Long id) {
-//
-//        return Result.success();
-//    }
+    @ApiOperation("催单")
+    @GetMapping("/reminder/{id}")
+    public Result reminder(@PathVariable("id") Long id) {
+        orderService.reminder(id);
+        return Result.success();
+    }
 
     /**
      * 再来一单就是将订单里的商品重新添加到购物车中

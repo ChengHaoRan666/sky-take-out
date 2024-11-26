@@ -66,6 +66,21 @@ public class OrderServiceImpl implements OrderService {
     private WebSocketServer webSocketServer;
 
     /**
+     * 催单
+     *
+     * @param orderId
+     */
+    @Override
+    public void reminder(Long orderId) {
+        Map map = new HashMap();
+        map.put("type", 2);
+        map.put("orderId", orderId);
+        String orderNumber = orderMapper.getByNumberById(orderId);
+        map.put("content", "订单号：" + orderNumber);
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
+    }
+
+    /**
      * 用户下单
      *
      * @param ordersSubmitDTO 下单传递的参数

@@ -82,9 +82,19 @@ public interface OrderMapper {
 
     /**
      * 根据状态和下单时间查询订单
+     *
      * @param status
      * @param orderTime
      */
     @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
     List<Orders> getByStatusAndOrdertimeLT(Integer status, LocalDateTime orderTime);
+
+    /**
+     * 通过订单id查找订单号
+     *
+     * @param orderId 订单id
+     * @return 订单号
+     */
+    @Select("select number from orders where id = #{orderId};")
+    String getByNumberById(Long orderId);
 }
