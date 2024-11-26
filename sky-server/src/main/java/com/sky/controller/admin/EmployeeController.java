@@ -44,8 +44,6 @@ public class EmployeeController {
     @PostMapping("/login")
     @ApiOperation("员工登录")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
-//        log.info("员工登录：{}", employeeLoginDTO);
-
         Employee employee = employeeService.login(employeeLoginDTO);
 
         //登录成功后，生成jwt令牌
@@ -94,7 +92,6 @@ public class EmployeeController {
     @GetMapping("/page")
     @ApiOperation("员工分页查询")
     public Result<PageResult> getEmp(EmployeePageQueryDTO employeePageQueryDTO) {
-//        log.info("员工分页查询{} {} {}", employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize(), employeePageQueryDTO.getName());
         PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(pageResult);
     }
@@ -106,7 +103,6 @@ public class EmployeeController {
     @PostMapping("/status/{status}")
     @ApiOperation("启用/禁用员工账号")
     public Result status(Long id, @PathVariable("status") Integer status) {
-//        log.info("员工账号{},{}", id, status);
         employeeService.status(id, status);
         return Result.success();
     }
@@ -118,7 +114,6 @@ public class EmployeeController {
     @PutMapping
     @ApiOperation("编辑用户信息")
     public Result EditInformation(@RequestBody EmployeeDTO employeeDTO) {
-//        log.info("编辑用户信息：{}", employeeDTO);
         employeeService.EditInformation(employeeDTO);
         return Result.success();
     }
@@ -140,7 +135,6 @@ public class EmployeeController {
     @PutMapping("/editPassword")
     @ApiOperation("修改密码")
     public Result changePassword(@RequestBody PasswordEditDTO passwordEditDTO) {
-//        log.info("修改密码：{}", passwordEditDTO);
         employeeService.changePassword(passwordEditDTO);
         return Result.success();
     }
