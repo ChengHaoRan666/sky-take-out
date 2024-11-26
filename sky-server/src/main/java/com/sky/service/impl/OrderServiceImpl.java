@@ -25,6 +25,7 @@ import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,8 @@ public class OrderServiceImpl implements OrderService {
     private shoppingCartMapper shoppingCartMapper;
     @Autowired
     private WeChatPayUtil weChatPayUtil;
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     /**
      * 用户下单
@@ -114,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
         shoppingCartMapper.clear(userId);
         // 5. 构造返回值返回
 
-        return OrderSubmitVO.builder().orderTime(LocalDateTime.now()).orderNumber(order.getNumber()).orderAmount(order.getAmount()).build();
+        return OrderSubmitVO.builder().id(orderId).orderTime(LocalDateTime.now()).orderNumber(order.getNumber()).orderAmount(order.getAmount()).build();
     }
 
     /**
@@ -135,9 +138,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 根据订单id取消订单
-     * 订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消
-     * 要判断订单处于那个阶段，如果是待付款，待接单可以取消，之后的状态都需要联系商家取消
+     * 根据订单id取消订单<br>
+     * 订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消<br>
+     * 要判断订单处于那个阶段，如果是待付款，待接单可以取消，之后的状态都需要联系商家取消<br>
      * 如果在待接单状态还需要退款
      *
      * @param orderId 订单id
@@ -338,6 +341,14 @@ public class OrderServiceImpl implements OrderService {
         orders.setCheckoutTime(LocalDateTime.now());
         orders.setPayStatus(Orders.PAID);
         orderMapper.update(orders);
+
+        Map map = new HashMap();
+        map.put("type", 1);//消息类型，1表示来单提醒,2表示客户催单
+        map.put("orderId", orders.getId());
+        map.put("content", "订单号：" + orderNumber);
+
+        //通过WebSocket实现来单提醒，向客户端浏览器推送消息
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
     }
 
     /**
