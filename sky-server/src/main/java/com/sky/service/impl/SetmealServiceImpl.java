@@ -125,6 +125,7 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     @Transactional
     public void deleteByIds(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) return;
         ids.forEach(id -> {
             Setmeal setmeal = setmealMapper.getById(id);
             if (StatusConstant.ENABLE.equals(setmeal.getStatus())) {
