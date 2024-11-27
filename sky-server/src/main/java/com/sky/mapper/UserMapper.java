@@ -4,6 +4,8 @@ import com.sky.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDateTime;
+
 /**
  * @Author: 程浩然
  * @Create: 2024/11/22 - 10:09
@@ -30,9 +32,19 @@ public interface UserMapper {
 
     /**
      * 通过id查询user
+     *
      * @param userId 用户Id
      * @return
      */
     @Select("select * from user where id = #{userId};")
     User getById(Long userId);
+
+    /**
+     * 在给定的范围内查找用户数量
+     *
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
+     * @return
+     */
+    Integer Statistics(LocalDateTime beginTime, LocalDateTime endTime);
 }

@@ -6,6 +6,7 @@ import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
 import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.UserReportVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -47,5 +48,19 @@ public class ReportController {
     public Result<TurnoverReportVO> turnoverStatistics(DataOverViewQueryDTO dataOverViewQueryDTO) {
         TurnoverReportVO turnoverReportVO = reportService.turnoverStatistics(dataOverViewQueryDTO);
         return Result.success(turnoverReportVO);
+    }
+
+    @ApiOperation("用户统计接口")
+    @GetMapping("/userStatistics")
+    public Result<UserReportVO> userStatistics(DataOverViewQueryDTO dataOverViewQueryDTO) {
+        UserReportVO userReportVO = reportService.userStatistics(dataOverViewQueryDTO);
+        return Result.success(userReportVO);
+    }
+
+
+    @ApiOperation("导出Excel报表接口")
+    @GetMapping("/export")
+    public void export() {
+
     }
 }

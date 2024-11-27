@@ -4,10 +4,12 @@ import com.sky.dto.DataOverViewQueryDTO;
 import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
+import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
 import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.UserReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,8 @@ import java.util.stream.Collectors;
 public class ReportServiceImpl implements ReportService {
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 查找销量前十菜品
@@ -158,6 +162,45 @@ public class ReportServiceImpl implements ReportService {
                 .builder()
                 .dateList(dataString)
                 .turnoverList(turnoverString)
+                .build();
+    }
+
+    /**
+     * 用户统计接口
+     *
+     * @param dataOverViewQueryDTO 开始时间和结束时间
+     * @return 用户统计信息
+     */
+    @Override
+    public UserReportVO userStatistics(DataOverViewQueryDTO dataOverViewQueryDTO) {
+        LocalDate begin = dataOverViewQueryDTO.getBegin();
+        LocalDate end = dataOverViewQueryDTO.getEnd();
+        LocalDateTime beginTime = null;
+        LocalDateTime endTime = null;
+        List<LocalDate> dataList = new ArrayList<>();
+        List<Integer> totalUserList = new ArrayList<>();
+        List<Integer> newUserList = new ArrayList<>();
+        while (!begin.isAfter(end)) {
+            beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+            endTime = LocalDateTime.of(begin, LocalTime.MAX);
+            Integer newUser = userMapper.Statistics(beginTime, endTime);
+            Integer totalUser = userMapper.Statistics(null, endTime);
+            dataList.add(begin);
+            totalUserList.add(totalUser);
+            newUserList.add(newUser);
+            begin = begin.plusDays(1);
+        }
+
+        String dataString = dataList.stream().map(LocalDate::toString).collect(Collectors.joining(","));
+        String totalUserString = totalUserList.stream().map(Object::toString).collect(Collectors.joining(","));
+        String newUserString = newUserList.stream().map(Object::toString).collect(Collectors.joining(","));
+
+
+        return UserReportVO
+                .builder()
+                .dateList(dataString)
+                .totalUserList(totalUserString)
+                .newUserList(newUserString)
                 .build();
     }
 }

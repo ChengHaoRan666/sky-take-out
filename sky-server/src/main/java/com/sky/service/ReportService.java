@@ -4,6 +4,7 @@ import com.sky.dto.DataOverViewQueryDTO;
 import com.sky.vo.OrderReportVO;
 import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.UserReportVO;
 
 /**
  * @Author: 程浩然
@@ -36,4 +37,11 @@ public interface ReportService {
      * @return 营业额统计信息
      */
     TurnoverReportVO turnoverStatistics(DataOverViewQueryDTO dataOverViewQueryDTO);
+
+    /**
+     * 用户统计接口
+     * @param dataOverViewQueryDTO 开始时间和结束时间
+     * @return 用户统计信息
+     */
+    UserReportVO userStatistics(DataOverViewQueryDTO dataOverViewQueryDTO);
 }
