@@ -213,7 +213,7 @@ public class ReportServiceImpl implements ReportService {
 
 
     /**
-     * 导出30天数据
+     * 导出30天数据让客户端下载
      *
      * @param response 响应
      */
