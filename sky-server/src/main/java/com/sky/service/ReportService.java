@@ -6,6 +6,8 @@ import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @Author: 程浩然
  * @Create: 2024/11/26 - 15:04
@@ -40,8 +42,16 @@ public interface ReportService {
 
     /**
      * 用户统计接口
+     *
      * @param dataOverViewQueryDTO 开始时间和结束时间
      * @return 用户统计信息
      */
     UserReportVO userStatistics(DataOverViewQueryDTO dataOverViewQueryDTO);
+
+    /**
+     * 导出30天数据
+     *
+     * @param response 响应
+     */
+    void export(HttpServletResponse response);
 }

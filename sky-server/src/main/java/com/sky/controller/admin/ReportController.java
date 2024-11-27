@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @Author: 程浩然
  * @Create: 2024/11/26 - 14:43
@@ -60,7 +62,7 @@ public class ReportController {
 
     @ApiOperation("导出Excel报表接口")
     @GetMapping("/export")
-    public void export() {
-
+    public void export(HttpServletResponse response) {
+        reportService.export(response);
     }
 }
